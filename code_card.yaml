@@ -1,0 +1,270 @@
+type: custom:stack-in-card
+mode: vertical
+keep:
+  box_shadow: true
+  margin: true
+  border_radius: true
+  background: true
+  outer_padding: false
+cards:
+  - type: entities
+    header:
+      type: picture
+      image: /local/image/freebox_delta_1.jpg
+    entities:
+      - entity: device_tracker.freebox_v7_r1
+        type: custom:multiple-entity-row
+        name: IP
+        icon: mdi:ip
+        show_state: false
+        entities:
+          - entity: device_tracker.freebox_v7_r1
+            attribute: IPv4
+            name: Externe
+          - entity: device_tracker.freebox_v7_r1
+            attribute: mac
+            name: Mac Adress
+      - entity: device_tracker.freebox_v7_r1
+        type: custom:multiple-entity-row
+        name: Uptime
+        icon: mdi:web-clock
+        show_state: false
+        entities:
+          - entity: device_tracker.freebox_v7_r1
+            attribute: uptime
+            format: total
+      - entity: device_tracker.freebox_v7_r1
+        type: custom:multiple-entity-row
+        name: Connection
+        icon: mdi:wan
+        show_state: false
+        entities:
+          - entity: device_tracker.freebox_v7_r1
+            attribute: connection_type
+            name: Type
+      - entity: switch.freebox_wifi
+        type: custom:multiple-entity-row
+        name: WiFi Switch
+        icon: mdi:wifi
+        toggle: true
+        state_color: true
+        show_state: true
+      - entity: button.reboot_freebox
+        name: Faire sonner Téléphone
+    state_color: true
+    show_header_toggle: false
+    card_mod:
+      style: |
+        .card-content div {
+          margin-top: -3px !important;
+          margin-left: -10px !important;
+          margin-bottom: 2.3px  !important;
+        }
+        :host {
+          font-size: 15px;
+        }
+        ha-card {
+          box-shadow: none;
+        }
+  - type: custom:mod-card
+    style:
+      .: |
+        ha-card {
+          margin: 5px 10px 0 10px;
+        }
+    card:
+      type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          entity: button.reboot_freebox
+          color_type: icon
+          name: Freebox v7<br/>Reboot
+          show_entity_picture: true
+          entity_picture: /local/image/Freebox-Delta-Server_3.png
+          color: "#44739e"
+          aspect_ratio: 4.55/1
+          layout: icon_name
+          styles:
+            card:
+              - padding: 0.2em
+              - margin: "-10px 0"
+              - "--mdc-ripple-color": "#44739e"
+              - "--mdc-ripple-press-opacity": 0.5
+            icon:
+              - opacity: 1
+            name:
+              - font-size: 0.85em
+              - white-space: normal
+            state:
+              - font-size: 0.75em
+              - white-space: normal
+            label:
+              - font-size: 0.65em
+              - white-space: normal
+          hold_action:
+            action: more-info
+          card_mod:
+            style: |
+              ha-card {
+                border-radius: 10px;
+                box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.7);
+              }
+        - type: custom:button-card
+          entity: sensor.freebox_missed_calls
+          color_type: icon
+          aspect_ratio: 4.55/1
+          icon: mdi:phone-alert
+          name: Appels manqués View/Reset
+          layout: icon_name
+          size: 45%
+          state:
+            - value: "on"
+              color: rgb(250, 0, 1)
+              icon: mdi:phone-alert
+            - value: "off"
+              color: rgb(0, 102, 0)
+              icon: mdi:phone-check
+          styles:
+            card:
+              - padding: 0.2em
+              - margin: "-10px 0"
+              - "--mdc-ripple-color": "#44739e"
+              - "--mdc-ripple-press-opacity": 0.5
+            icon:
+              - opacity: 1
+            name:
+              - font-size: 0.85em
+              - white-space: normal
+            state:
+              - font-size: 0.75em
+              - white-space: normal
+            label:
+              - font-size: 0.65em
+              - white-space: normal
+          double_tap_action:
+            action: call-service
+            service: livebox.remove_call_missed
+          hold_action:
+            action: more-info
+          card_mod:
+            style: |
+              ha-card {
+                border-radius: 10px;
+                box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.7);
+              }
+  - type: horizontal-stack
+    cards:
+      - type: custom:bar-card
+        entities:
+          - entity: sensor.speedtest_cli_download
+            name: Download
+            icon: fas:download
+            color: "#336600"
+            entity_row: true
+            min: 1
+            max: 60
+            positions:
+              icon: inside
+              minmax: "off"
+            animation:
+              state: "on"
+              speed: "1"
+            height: 25px
+        card_mod:
+          style: |
+            ha-card {
+              font-size: 14px;
+              --bar-card-border-radius: 5px;
+              box-shadow: none;
+              --mdc-icon-size: 20px;
+            }
+      - type: custom:bar-card
+        entities:
+          - entity: sensor.speedtest_cli_upload
+            direction: right
+            name: Upload
+            icon: fas:upload
+            color: rgb(250, 0, 1)
+            entity_row: true
+            min: 1
+            max: 5
+            positions:
+              icon: inside
+              minmax: "off"
+            animation:
+              state: "on"
+              speed: "1"
+            height: 25px
+            decimal: "2"
+        card_mod:
+          style: |
+            ha-card {
+              font-size: 14px;
+              box-shadow: none;
+              --bar-card-border-radius: 5x;
+              --mdc-icon-size: 10px;
+            }
+  - type: custom:mini-graph-card
+    decimals: 0
+    hour24: true
+    height: 80
+    hours_to_show: 24
+    points_per_hour: 1
+    line_width: 2
+    entities:
+      - entity: sensor.speedtest_cli_ping
+        name: Ping
+    show:
+      fill: true
+      graph: line
+      icon: true
+      name: true
+      state: true
+      labels: false
+      extrema: false
+      average: false
+      icon_adaptive_color: true
+    align_icon: right
+    align_state: left
+    font_size: 70
+    animate: false
+    color_thresholds:
+      - value: 22
+        color: "#336600"
+      - value: 24
+        color: "#f39c12"
+      - value: 25
+        color: "#d35400"
+      - value: 26
+        color: "#c0392b"
+    card_mod:
+      style: |
+        ha-card .header.flex .name.flex {
+          color: #44739e;
+          font-size: 14px;
+        }
+        .header.flex .icon {
+          color: #44739e;
+        }
+        .fill {
+          fill: white;
+          opacity: 1 !important;
+        }
+        ha-card {
+          margin-top: 5px !important;
+          box-shadow: none;
+        }
+        ha-card .states.flex::after {
+          content: "Opérateur: {{states('sensor.speedtest_isp')}}  ";
+          white-space: pre;
+          background-color: rgba(68, 115, 158,0.4);
+          padding: 2px 2px 0px 2px;
+          margin-top: -10px;
+          border-radius: 5px;
+          font-size: 14px;
+        }
+card_mod:
+  style: |
+    ha-card {
+      box-shadow: 0 0 0 1px gray;
+    }
